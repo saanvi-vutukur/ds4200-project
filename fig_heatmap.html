@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Industry vs Workforce Impact Heatmap</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: #ffffff;
+        color: #1a1a18;
+        padding: 2rem;
+      }
+
+      .chart-title {
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+      .chart-subtitle {
+        font-size: 13px;
+        color: #5f5e5a;
+        margin-bottom: 1.5rem;
+      }
+
+      /* ── Interaction controls ── */
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+      }
+      .controls label {
+        font-size: 13px;
+        color: #5f5e5a;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .controls select {
+        font-size: 13px;
+        padding: 4px 8px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 6px;
+        background: #fff;
+        cursor: pointer;
+      }
+      .toggle-group {
+        display: flex;
+        gap: 6px;
+      }
+      .toggle-btn {
+        font-size: 12px;
+        padding: 4px 12px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 20px;
+        background: #fff;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .toggle-btn.active {
+        background: #1a1a18;
+        color: #fff;
+        border-color: #1a1a18;
+      }
+
+      /* ── SVG / chart ── */
+      #chart {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      .cell {
+        rx: 4;
+        cursor: pointer;
+        transition: opacity 0.15s;
+      }
+      .cell:hover {
+        opacity: 0.75;
+        stroke: #333;
+        stroke-width: 1.5px;
+      }
+
+      .axis-label {
+        font-size: 12px;
+        fill: #5f5e5a;
+      }
+      .x-label {
+        font-size: 11px;
+        fill: #5f5e5a;
+      }
+      .y-label {
+        font-size: 11px;
+        fill: #1a1a18;
+      }
+      .cell-text {
+        font-size: 11px;
+        font-weight: 500;
+        pointer-events: none;
+        dominant-baseline: middle;
+        text-anchor: middle;
+      }
+
+      /* ── Tooltip ── */
+      .tooltip {
+        position: fixed;
+        background: #1a1a18;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        line-height: 1.6;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s;
+        max-width: 200px;
+        z-index: 999;
+      }
+
+      /* ── Legend ── */
+      .legend-wrap {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 1.25rem;
+        flex-wrap: wrap;
+      }
+      .legend-label {
+        font-size: 12px;
+        color: #5f5e5a;
+      }
+
+      /* ── Instruction note ── */
+      .instruction {
+        font-size: 12px;
+        color: #888780;
+        margin-top: 0.75rem;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chart-title">Industry × Workforce Impact Heatmap</div>
+    <div class="chart-subtitle">
+      How GenAI adoption outcomes are distributed across industries
+    </div>
+
+    <div class="controls">
+      <label>
+        Sort industries by:
+        <select id="sort-select">
+          <option value="name">Alphabetical</option>
+          <option value="reskilling">Most Reskilling &amp; Growth</option>
+          <option value="jobloss">Most Job Loss Risk</option>
+          <option value="total">Total companies</option>
+        </select>
+      </label>
+
+      <label>Show values as:</label>
+      <div class="toggle-group">
+        <button class="toggle-btn active" data-mode="pct">% of industry</button>
+        <button class="toggle-btn" data-mode="count">Count</button>
+      </div>
+    </div>
+
+    <div id="chart"></div>
+    <p class="instruction">
+      Hover over a cell for details. Use controls above to re-sort or switch
+      between percentage and count view.
+    </p>
+
+    <div class="legend-wrap" id="legend"></div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+      // ── Data ─────────────────────────────────────────────────────────────────────
+      // Replace this with real data exported from your notebook:
+      //   import json
+      //   out = df_usa.groupby(["Industry","Workforce Impact"]).size().reset_index(name="Count")
+      //   out.to_json("heatmap_data.json", orient="records")
+      // Then load it with: d3.json("heatmap_data.json").then(render)
+      // For now, realistic placeholder data based on your dataset structure:
+
+      const RAW = [
+        {
+          Industry: "Advertising",
+          "Workforce Impact": "Job Loss Risk",
+          Count: 13,
+        },
+        {
+          Industry: "Advertising",
+          "Workforce Impact": "No Major Impact",
+          Count: 291,
+        },
+        {
+          Industry: "Advertising",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 70,
+        },
+        {
+          Industry: "Advertising",
+          "Workforce Impact": "Role Change",
+          Count: 125,
+        },
+        { Industry: "Defense", "Workforce Impact": "Job Loss Risk", Count: 22 },
+        {
+          Industry: "Defense",
+          "Workforce Impact": "No Major Impact",
+          Count: 274,
+        },
+        {
+          Industry: "Defense",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 76,
+        },
+        { Industry: "Defense", "Workforce Impact": "Role Change", Count: 115 },
+        {
+          Industry: "Education",
+          "Workforce Impact": "Job Loss Risk",
+          Count: 15,
+        },
+        {
+          Industry: "Education",
+          "Workforce Impact": "No Major Impact",
+          Count: 293,
+        },
+        {
+          Industry: "Education",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 75,
+        },
+        {
+          Industry: "Education",
+          "Workforce Impact": "Role Change",
+          Count: 127,
+        },
+        {
+          Industry: "Entertainment",
+          "Workforce Impact": "Job Loss Risk",
+          Count: 12,
+        },
+        {
+          Industry: "Entertainment",
+          "Workforce Impact": "No Major Impact",
+          Count: 300,
+        },
+        {
+          Industry: "Entertainment",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 71,
+        },
+        {
+          Industry: "Entertainment",
+          "Workforce Impact": "Role Change",
+          Count: 128,
+        },
+        { Industry: "Finance", "Workforce Impact": "Job Loss Risk", Count: 26 },
+        {
+          Industry: "Finance",
+          "Workforce Impact": "No Major Impact",
+          Count: 278,
+        },
+        {
+          Industry: "Finance",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 77,
+        },
+        { Industry: "Finance", "Workforce Impact": "Role Change", Count: 125 },
+        {
+          Industry: "Healthcare",
+          "Workforce Impact": "Job Loss Risk",
+          Count: 17,
+        },
+        {
+          Industry: "Healthcare",
+          "Workforce Impact": "No Major Impact",
+          Count: 303,
+        },
+        {
+          Industry: "Healthcare",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 77,
+        },
+        {
+          Industry: "Healthcare",
+          "Workforce Impact": "Role Change",
+          Count: 106,
+        },
+        {
+          Industry: "Hospitality",
+          "Workforce Impact": "Job Loss Risk",
+          Count: 27,
+        },
+        {
+          Industry: "Hospitality",
+          "Workforce Impact": "No Major Impact",
+          Count: 273,
+        },
+        {
+          Industry: "Hospitality",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 68,
+        },
+        {
+          Industry: "Hospitality",
+          "Workforce Impact": "Role Change",
+          Count: 120,
+        },
+        {
+          Industry: "Legal Services",
+          "Workforce Impact": "Job Loss Risk",
+          Count: 20,
+        },
+        {
+          Industry: "Legal Services",
+          "Workforce Impact": "No Major Impact",
+          Count: 300,
+        },
+        {
+          Industry: "Legal Services",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 61,
+        },
+        {
+          Industry: "Legal Services",
+          "Workforce Impact": "Role Change",
+          Count: 122,
+        },
+        {
+          Industry: "Manufacturing",
+          "Workforce Impact": "Job Loss Risk",
+          Count: 22,
+        },
+        {
+          Industry: "Manufacturing",
+          "Workforce Impact": "No Major Impact",
+          Count: 294,
+        },
+        {
+          Industry: "Manufacturing",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 94,
+        },
+        {
+          Industry: "Manufacturing",
+          "Workforce Impact": "Role Change",
+          Count: 116,
+        },
+        { Industry: "Retail", "Workforce Impact": "Job Loss Risk", Count: 15 },
+        {
+          Industry: "Retail",
+          "Workforce Impact": "No Major Impact",
+          Count: 307,
+        },
+        {
+          Industry: "Retail",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 70,
+        },
+        { Industry: "Retail", "Workforce Impact": "Role Change", Count: 125 },
+        {
+          Industry: "Technology",
+          "Workforce Impact": "Job Loss Risk",
+          Count: 15,
+        },
+        {
+          Industry: "Technology",
+          "Workforce Impact": "No Major Impact",
+          Count: 283,
+        },
+        {
+          Industry: "Technology",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 77,
+        },
+        {
+          Industry: "Technology",
+          "Workforce Impact": "Role Change",
+          Count: 109,
+        },
+        { Industry: "Telecom", "Workforce Impact": "Job Loss Risk", Count: 18 },
+        {
+          Industry: "Telecom",
+          "Workforce Impact": "No Major Impact",
+          Count: 281,
+        },
+        {
+          Industry: "Telecom",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 68,
+        },
+        { Industry: "Telecom", "Workforce Impact": "Role Change", Count: 130 },
+        {
+          Industry: "Transportation",
+          "Workforce Impact": "Job Loss Risk",
+          Count: 21,
+        },
+        {
+          Industry: "Transportation",
+          "Workforce Impact": "No Major Impact",
+          Count: 262,
+        },
+        {
+          Industry: "Transportation",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 81,
+        },
+        {
+          Industry: "Transportation",
+          "Workforce Impact": "Role Change",
+          Count: 129,
+        },
+        {
+          Industry: "Utilities",
+          "Workforce Impact": "Job Loss Risk",
+          Count: 22,
+        },
+        {
+          Industry: "Utilities",
+          "Workforce Impact": "No Major Impact",
+          Count: 308,
+        },
+        {
+          Industry: "Utilities",
+          "Workforce Impact": "Reskilling & Growth",
+          Count: 80,
+        },
+        {
+          Industry: "Utilities",
+          "Workforce Impact": "Role Change",
+          Count: 123,
+        },
+      ];
+
+      // ── Config ────────────────────────────────────────────────────────────────────
+      const IMPACTS = [
+        "Reskilling & Growth",
+        "Role Change",
+        "No Major Impact",
+        "Job Loss Risk",
+      ];
+
+      const COLOR_SCALES = {
+        "Reskilling & Growth": d3.scaleSequential(d3.interpolateBlues),
+        "Role Change": d3.scaleSequential(d3.interpolatePurples),
+        "No Major Impact": d3.scaleSequential(d3.interpolateGreys),
+        "Job Loss Risk": d3.scaleSequential(d3.interpolateReds),
+      };
+
+      const LEGEND_COLORS = {
+        "Reskilling & Growth": "#2171b5",
+        "Role Change": "#6a51a3",
+        "No Major Impact": "#636363",
+        "Job Loss Risk": "#cb181d",
+      };
+
+      // ── State ─────────────────────────────────────────────────────────────────────
+      let mode = "pct"; // "pct" | "count"
+      let sortBy = "name";
+
+      // ── Precompute totals & pct ───────────────────────────────────────────────────
+      function enrich(raw) {
+        const totals = {};
+        raw.forEach((d) => {
+          totals[d.Industry] = (totals[d.Industry] || 0) + d.Count;
+        });
+        return raw.map((d) => ({
+          ...d,
+          Total: totals[d.Industry],
+          Pct: +((d.Count / totals[d.Industry]) * 100).toFixed(1),
+        }));
+      }
+
+      const DATA = enrich(RAW);
+
+      // ── Sort helper ───────────────────────────────────────────────────────────────
+      function sortedIndustries(data, by) {
+        const industries = [...new Set(data.map((d) => d.Industry))];
+        if (by === "name") return industries.sort();
+        if (by === "total") {
+          const t = {};
+          data.forEach((d) => (t[d.Industry] = d.Total));
+          return industries.sort((a, b) => d3.descending(t[a], t[b]));
+        }
+        const impact =
+          by === "reskilling" ? "Reskilling & Growth" : "Job Loss Risk";
+        const v = {};
+        data
+          .filter((d) => d["Workforce Impact"] === impact)
+          .forEach((d) => (v[d.Industry] = d.Pct));
+        return industries.sort((a, b) => d3.descending(v[a] || 0, v[b] || 0));
+      }
+
+      // ── Render ────────────────────────────────────────────────────────────────────
+      function render() {
+        d3.select("#chart").selectAll("*").remove();
+
+        const industries = sortedIndustries(DATA, sortBy);
+
+        const margin = { top: 20, right: 20, bottom: 90, left: 140 };
+        const cellW = 120,
+          cellH = 44;
+        const width = margin.left + IMPACTS.length * cellW + margin.right;
+        const height = margin.top + industries.length * cellH + margin.bottom;
+
+        const svg = d3
+          .select("#chart")
+          .append("svg")
+          .attr("viewBox", `0 0 ${width} ${height}`)
+          .attr("width", "100%")
+          .style("max-width", width + "px");
+
+        const g = svg
+          .append("g")
+          .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const innerW = IMPACTS.length * cellW;
+        const innerH = industries.length * cellH;
+
+        // Per-impact color scale domain
+        const maxPct = d3.max(DATA, (d) => d.Pct);
+        const maxCount = d3.max(DATA, (d) => d.Count);
+
+        // X axis
+        const xScale = d3
+          .scaleBand()
+          .domain(IMPACTS)
+          .range([0, innerW])
+          .padding(0.05);
+
+        g.append("g")
+          .attr("transform", `translate(0, ${innerH})`)
+          .call(d3.axisBottom(xScale).tickSize(0))
+          .call((ax) => ax.select(".domain").remove())
+          .selectAll("text")
+          .attr("class", "x-label")
+          .attr("dy", "1.2em")
+          .attr("text-anchor", "middle")
+          .style("font-size", "12px");
+
+        // Y axis
+        const yScale = d3
+          .scaleBand()
+          .domain(industries)
+          .range([0, innerH])
+          .padding(0.05);
+
+        g.append("g")
+          .call(d3.axisLeft(yScale).tickSize(0))
+          .call((ax) => ax.select(".domain").remove())
+          .selectAll("text")
+          .attr("class", "y-label")
+          .style("font-size", "12px");
+
+        // Cells
+        const tooltip = d3.select("#tooltip");
+
+        IMPACTS.forEach((impact) => {
+          const impactData = DATA.filter(
+            (d) => d["Workforce Impact"] === impact
+          );
+          const cScale = COLOR_SCALES[impact]
+            .copy()
+            .domain([0, mode === "pct" ? maxPct : maxCount]);
+
+          g.selectAll(`.cell-${impact.replace(/\W/g, "_")}`)
+            .data(impactData)
+            .join("rect")
+            .attr("class", "cell")
+            .attr("x", xScale(impact))
+            .attr("y", (d) => yScale(d.Industry))
+            .attr("width", xScale.bandwidth())
+            .attr("height", yScale.bandwidth())
+            .attr("rx", 4)
+            .attr("fill", (d) => cScale(mode === "pct" ? d.Pct : d.Count))
+            .on("mousemove", (event, d) => {
+              tooltip
+                .style("opacity", 1)
+                .style("left", event.clientX + 14 + "px")
+                .style("top", event.clientY - 10 + "px").html(`
+            <strong>${d.Industry}</strong><br>
+            ${d["Workforce Impact"]}<br>
+            ${d.Count} companies (${d.Pct}%)<br>
+            of ${d.Total} total
+          `);
+            })
+            .on("mouseleave", () => tooltip.style("opacity", 0));
+
+          // Cell labels
+          g.selectAll(`.label-${impact.replace(/\W/g, "_")}`)
+            .data(impactData)
+            .join("text")
+            .attr("class", "cell-text")
+            .attr("x", xScale(impact) + xScale.bandwidth() / 2)
+            .attr("y", (d) => yScale(d.Industry) + yScale.bandwidth() / 2)
+            .attr("fill", (d) => {
+              const val = mode === "pct" ? d.Pct : d.Count;
+              const max = mode === "pct" ? maxPct : maxCount;
+              return val / max > 0.55 ? "#fff" : "#333";
+            })
+            .text((d) => (mode === "pct" ? `${d.Pct}%` : d.Count));
+        });
+
+        // Legend
+        const legendEl = document.getElementById("legend");
+        legendEl.innerHTML = "";
+        IMPACTS.forEach((impact) => {
+          const item = document.createElement("div");
+          item.style.display = "flex";
+          item.style.alignItems = "center";
+          item.style.gap = "5px";
+          item.style.marginRight = "14px";
+          item.innerHTML = `
+      <div style="width:12px;height:12px;border-radius:3px;background:${LEGEND_COLORS[impact]}"></div>
+      <span style="font-size:12px;color:#5f5e5a">${impact}</span>
+    `;
+          legendEl.appendChild(item);
+        });
+      }
+
+      // ── Event listeners ───────────────────────────────────────────────────────────
+      document.getElementById("sort-select").addEventListener("change", (e) => {
+        sortBy = e.target.value;
+        render();
+      });
+
+      document.querySelectorAll(".toggle-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".toggle-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          mode = btn.dataset.mode;
+          render();
+        });
+      });
+
+      // ── Init ──────────────────────────────────────────────────────────────────────
+      render();
+
+      // ── REPLACE PLACEHOLDER DATA ──────────────────────────────────────────────────
+      // To use your real data, add this to your notebook:
+      //
+      //   impact_counts = (
+      //       df_usa.groupby(["Industry", "Workforce Impact"])
+      //       .size().reset_index(name="Count")
+      //   )
+      //   impact_counts.to_json("heatmap_data.json", orient="records")
+      //
+      // Then replace the RAW array above with a fetch call:
+      //
+      //   d3.json("heatmap_data.json").then(rawData => {
+      //     // reassign DATA = enrich(rawData);  then call render()
+      //   });
+    </script>
+  </body>
+</html>

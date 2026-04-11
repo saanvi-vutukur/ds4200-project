@@ -1,490 +1,510 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DS4200 Project — Your Title Here</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DS4200 Project — Enterprise Adoption of AI Tools</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    :root {
-      --bg: #ffffff;
-      --bg-secondary: #f7f6f3;
-      --text: #1a1a18;
-      --text-muted: #5f5e5a;
-      --text-faint: #888780;
-      --border: rgba(0,0,0,0.12);
-      --border-hover: rgba(0,0,0,0.25);
-      --blue-bg: #E6F1FB;
-      --blue-text: #0C447C;
-      --teal-bg: #E1F5EE;
-      --teal-text: #0F6E56;
-      --amber-bg: #FAEEDA;
-      --amber-text: #854F0B;
-      --purple-bg: #EEEDFE;
-      --purple-text: #3C3489;
-      --accent: #185FA5;
-    }
+      :root {
+        --bg: #ffffff;
+        --bg-secondary: #f7f6f3;
+        --text: #1a1a18;
+        --text-muted: #5f5e5a;
+        --text-faint: #888780;
+        --border: rgba(0, 0, 0, 0.12);
+        --border-hover: rgba(0, 0, 0, 0.25);
+        --blue-bg: #e6f1fb;
+        --blue-text: #0c447c;
+        --teal-bg: #e1f5ee;
+        --teal-text: #0f6e56;
+        --amber-bg: #faeeda;
+        --amber-text: #854f0b;
+        --purple-bg: #eeedfe;
+        --purple-text: #3c3489;
+        --accent: #185fa5;
+      }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-    }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+      }
 
-    /* ── Layout ─────────────────────────────── */
-    .site { max-width: 920px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+      .site {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 0 1.5rem 5rem;
+      }
 
-    /* ── Nav ────────────────────────────────── */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.25rem 0;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 3rem;
-      position: sticky;
-      top: 0;
-      background: var(--bg);
-      z-index: 100;
-    }
-    .nav-title { font-size: 15px; font-weight: 500; }
-    .nav-links { display: flex; gap: 24px; }
-    .nav-links a {
-      font-size: 13px;
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .nav-links a:hover { color: var(--text); }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 3rem;
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        z-index: 100;
+      }
+      .nav-title {
+        font-size: 15px;
+        font-weight: 500;
+      }
+      .nav-links {
+        display: flex;
+        gap: 24px;
+      }
+      .nav-links a {
+        font-size: 13px;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
 
-    /* ── Hero ───────────────────────────────── */
-    .hero {
-      padding-bottom: 3rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 3rem;
-    }
-    .tag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--blue-text);
-      background: var(--blue-bg);
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-bottom: 1rem;
-    }
-    h1 { font-size: 32px; font-weight: 500; line-height: 1.25; margin-bottom: 1rem; }
-    .hero p { font-size: 16px; color: var(--text-muted); max-width: 680px; }
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 1.5rem;
-      font-size: 13px;
-      color: var(--text-faint);
-    }
-    .meta span::before { content: "· "; }
-    .meta span:first-child::before { content: ""; }
+      .hero {
+        padding-bottom: 3rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 3rem;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--blue-text);
+        background: var(--blue-bg);
+        padding: 3px 10px;
+        border-radius: 20px;
+        margin-bottom: 1rem;
+      }
+      h1 {
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 1.25;
+        margin-bottom: 1rem;
+      }
+      .hero p {
+        font-size: 16px;
+        color: var(--text-muted);
+        max-width: 680px;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 1.5rem;
+        font-size: 13px;
+        color: var(--text-faint);
+      }
+      .meta span::before {
+        content: "· ";
+      }
+      .meta span:first-child::before {
+        content: "";
+      }
 
-    /* ── Section headings ───────────────────── */
-    section { margin-bottom: 3.5rem; }
-    h2 {
-      font-size: 20px;
-      font-weight: 500;
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-    h3 { font-size: 15px; font-weight: 500; margin-bottom: 0.5rem; }
-    p { font-size: 14px; color: var(--text-muted); margin-bottom: 0.75rem; }
+      section {
+        margin-bottom: 3.5rem;
+      }
+      h2 {
+        font-size: 20px;
+        font-weight: 500;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border);
+      }
+      h3 {
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+      p {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-bottom: 0.75rem;
+      }
 
-    /* ── Stat cards ─────────────────────────── */
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 12px;
-      margin-bottom: 1.5rem;
-    }
-    .stat {
-      background: var(--bg-secondary);
-      border-radius: 10px;
-      padding: 1rem 1.25rem;
-    }
-    .stat-label { font-size: 12px; color: var(--text-faint); margin-bottom: 4px; }
-    .stat-value { font-size: 22px; font-weight: 500; }
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 12px;
+        margin-bottom: 1.5rem;
+      }
+      .stat {
+        background: var(--bg-secondary);
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+      }
+      .stat-label {
+        font-size: 12px;
+        color: var(--text-faint);
+        margin-bottom: 4px;
+      }
+      .stat-value {
+        font-size: 22px;
+        font-weight: 500;
+      }
 
-    /* ── Cards ──────────────────────────────── */
-    .card {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem;
-    }
+      .card {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1rem;
+      }
 
-    /* ── Badges ─────────────────────────────── */
-    .badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 2px 9px;
-      border-radius: 20px;
-      margin: 3px 3px 3px 0;
-    }
-    .badge-blue   { background: var(--blue-bg);   color: var(--blue-text); }
-    .badge-teal   { background: var(--teal-bg);   color: var(--teal-text); }
-    .badge-amber  { background: var(--amber-bg);  color: var(--amber-text); }
-    .badge-purple { background: var(--purple-bg); color: var(--purple-text); }
+      .badge {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 500;
+        padding: 2px 9px;
+        border-radius: 20px;
+        margin: 3px 3px 3px 0;
+      }
+      .badge-blue {
+        background: var(--blue-bg);
+        color: var(--blue-text);
+      }
+      .badge-teal {
+        background: var(--teal-bg);
+        color: var(--teal-text);
+      }
+      .badge-amber {
+        background: var(--amber-bg);
+        color: var(--amber-text);
+      }
+      .badge-purple {
+        background: var(--purple-bg);
+        color: var(--purple-text);
+      }
 
-    /* ── Viz grid ───────────────────────────── */
-    .viz-full { margin-bottom: 1.5rem; }
-    .viz-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-    @media (max-width: 640px) { .viz-grid { grid-template-columns: 1fr; } }
+      .viz-card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        background: var(--bg);
+        margin-bottom: 1.5rem;
+      }
+      .viz-title {
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+      .viz-desc {
+        font-size: 13px;
+        color: var(--text-muted);
+        line-height: 1.55;
+        margin-bottom: 0.75rem;
+      }
 
-    .viz-card {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      background: var(--bg);
-    }
-    .viz-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
-    .viz-desc {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.55;
-      margin-bottom: 0.75rem;
-    }
+      iframe {
+        width: 100%;
+        border: none;
+        border-radius: 6px;
+        display: block;
+        margin-top: 0.75rem;
+      }
 
-    /* ── Iframe wrappers ────────────────────── */
-    .viz-frame {
-      width: 100%;
-      border: none;
-      border-radius: 6px;
-      background: var(--bg-secondary);
-      display: block;
-    }
+      img.chart-img {
+        width: 100%;
+        border-radius: 6px;
+        display: block;
+        margin-top: 0.75rem;
+      }
 
-    /* ── Placeholder (remove when you add real charts) ── */
-    .viz-placeholder {
-      background: var(--bg-secondary);
-      border: 1px dashed var(--border-hover);
-      border-radius: 8px;
-      height: 240px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      color: var(--text-faint);
-      font-size: 13px;
-      text-align: center;
-      padding: 1rem;
-    }
-    .viz-placeholder .icon { font-size: 28px; margin-bottom: 4px; }
-    .viz-placeholder small { font-size: 11px; }
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+      }
+      .summary-item {
+        background: var(--bg-secondary);
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+      }
+      .summary-num {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-faint);
+        margin-bottom: 4px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .summary-item h3 {
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 6px;
+      }
+      .summary-item p {
+        font-size: 13px;
+        margin: 0;
+      }
 
-    /* ── Summary grid ───────────────────────── */
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-    }
-    .summary-item {
-      background: var(--bg-secondary);
-      border-radius: 10px;
-      padding: 1rem 1.25rem;
-    }
-    .summary-num { font-size: 11px; font-weight: 600; color: var(--text-faint); margin-bottom: 4px; letter-spacing: 0.05em; text-transform: uppercase; }
-    .summary-item h3 { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
-    .summary-item p { font-size: 13px; margin: 0; }
+      .ref-list {
+        list-style: none;
+      }
+      .ref-list li {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-bottom: 0.6rem;
+        padding-left: 1.5rem;
+        position: relative;
+      }
+      .ref-list li::before {
+        content: attr(data-n);
+        position: absolute;
+        left: 0;
+        color: var(--text-faint);
+        font-size: 12px;
+        top: 2px;
+      }
+      .ref-list a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .ref-list a:hover {
+        text-decoration: underline;
+      }
 
-    /* ── References ─────────────────────────── */
-    .ref-list { list-style: none; }
-    .ref-list li { font-size: 14px; color: var(--text-muted); margin-bottom: 0.6rem; padding-left: 1.5rem; position: relative; }
-    .ref-list li::before { content: attr(data-n); position: absolute; left: 0; color: var(--text-faint); font-size: 12px; top: 2px; }
-    .ref-list a { color: var(--accent); text-decoration: none; }
-    .ref-list a:hover { text-decoration: underline; }
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
+      }
+      .team-card {
+        background: var(--bg-secondary);
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+      }
+      .team-name {
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+      .team-role {
+        font-size: 12px;
+        color: var(--text-muted);
+        line-height: 1.4;
+      }
 
-    /* ── Team ───────────────────────────────── */
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-    }
-    .team-card {
-      background: var(--bg-secondary);
-      border-radius: 10px;
-      padding: 1rem 1.25rem;
-    }
-    .team-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
-    .team-role { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+      hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2.5rem 0;
+      }
 
-    /* ── Divider ────────────────────────────── */
-    hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
-
-    /* ── Footer ─────────────────────────────── */
-    footer { font-size: 12px; color: var(--text-faint); padding-top: 1rem; border-top: 1px solid var(--border); }
-  </style>
-</head>
-<body>
-<div class="site">
-
-  <!-- ── Navigation ── -->
-  <nav>
-    <span class="nav-title">DS4200 Project</span>
-    <div class="nav-links">
-      <a href="#intro">Introduction</a>
-      <a href="#data">Data</a>
-      <a href="#visualizations">Visualizations</a>
-      <a href="#findings">Findings</a>
-      <a href="#references">References</a>
-    </div>
-  </nav>
-
-  <!-- ── Hero ── -->
-  <div class="hero" id="intro">
-    <span class="tag">DS4200 · Northeastern University</span>
-    <h1>Your Project Title Goes Here</h1>
-    <p>
-      Write a 2–3 sentence introduction to your project here. Explain the topic,
-      why it matters, and what question(s) you are trying to answer through data
-      visualization. Keep it accessible for a general audience.
-    </p>
-    <div class="meta">
-      <span>Group [X]</span>
-      <span>Spring 2025</span>
-      <span>[Your names]</span>
-    </div>
-  </div>
-
-  <!-- ── Data ── -->
-  <section id="data">
-    <h2>The data</h2>
-    <div class="stat-grid">
-      <div class="stat">
-        <div class="stat-label">Observations</div>
-        <div class="stat-value">2,400+</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Features</div>
-        <div class="stat-value">14</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Source</div>
-        <div class="stat-value" style="font-size:15px;line-height:1.4">Dataset Name</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Time range</div>
-        <div class="stat-value" style="font-size:15px;line-height:1.4">20XX–20XX</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Data description</h3>
-      <p>
-        Describe your dataset here — where it came from, what each row represents,
-        and what the key columns are. Mention the mix of categorical and continuous
-        features, and explain why this dataset is well-suited for your topic.
-      </p>
-      <p>
-        Also note any limitations: what information might be missing from the data?
-        Are there any collection biases to be aware of?
-      </p>
-      <div style="margin-top:0.75rem;">
-        <span class="badge badge-blue">Categorical features</span>
-        <span class="badge badge-teal">Continuous features</span>
-        <span class="badge badge-amber">Temporal features</span>
-        <span class="badge badge-purple">Spatial features</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Visualizations ── -->
-  <section id="visualizations">
-    <h2>Visualizations</h2>
-
-    <!-- Figure 1 — full width (Altair) -->
-    <div class="viz-full viz-card" style="margin-bottom:1.5rem;">
-      <div class="viz-title">Figure 1 · Overview — [Chart title]</div>
-      <div class="viz-desc">
-        Replace this text with a paragraph explaining what this chart shows,
-        what the viewer should take away, and what design choices you made
-        (color palette, scale, layout, etc.).
-      </div>
-      <span class="badge badge-teal">Altair · interactive</span>
-
-      <!--
-        HOW TO EMBED AN ALTAIR CHART:
-        1. In Python: chart.save("fig1.html")
-        2. Upload fig1.html alongside index.html in your repo
-        3. Replace the .viz-placeholder div below with:
-           <iframe src="fig1.html" class="viz-frame" height="400"></iframe>
-      -->
-      <div class="viz-placeholder" style="margin-top:0.75rem; height:320px;">
-        <div class="icon">📊</div>
-        <strong>Altair chart — fig1.html</strong>
-        <small>Replace with: &lt;iframe src="fig1.html" class="viz-frame" height="320"&gt;&lt;/iframe&gt;</small>
-      </div>
-    </div>
-
-    <!-- Figures 2–5 — 2-column grid -->
-    <div class="viz-grid">
-
-      <!-- Figure 2 — D3 -->
-      <div class="viz-card">
-        <div class="viz-title">Figure 2 · [Chart title]</div>
-        <div class="viz-desc">
-          Takeaway paragraph: what does this chart reveal? How does it connect
-          to your research question?
+      footer {
+        font-size: 12px;
+        color: var(--text-faint);
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="site">
+      <!-- ── nav bar ── -->
+      <nav>
+        <span class="nav-title">DS4200 Project</span>
+        <div class="nav-links">
+          <a href="#intro">Introduction</a>
+          <a href="#data">Data</a>
+          <a href="#visualizations">Visualizations</a>
+          <a href="#findings">Findings</a>
         </div>
-        <span class="badge badge-blue">D3 · hover tooltip</span>
-        <!--
-          HOW TO EMBED A D3 CHART:
-          1. Write your D3 code in a file, e.g. fig2.html
-          2. Upload it to your repo
-          3. Replace the placeholder below with:
-             <iframe src="fig2.html" class="viz-frame" height="260"></iframe>
-        -->
-        <div class="viz-placeholder" style="margin-top:0.75rem;">
-          <div class="icon">📈</div>
-          <strong>D3 chart — fig2.html</strong>
-          <small>Interaction: hover tooltip</small>
+      </nav>
+
+      <!-- ── intro section ── -->
+      <div class="hero" id="intro">
+        <h1>Enterprise Adoption of AI Tools</h1>
+        <p>filler text</p>
+        <div class="meta">
+          <span>Spring 2026</span>
+          <span> Saanvi Vutukur, Maya Korintholil, Aashka Dave</span>
         </div>
       </div>
 
-      <!-- Figure 3 — Altair map/scatter -->
-      <div class="viz-card">
-        <div class="viz-title">Figure 3 · [Chart title]</div>
-        <div class="viz-desc">
-          Takeaway paragraph: what does this chart reveal? How does it connect
-          to your research question?
-        </div>
-        <span class="badge badge-amber">Altair · click to filter</span>
-        <div class="viz-placeholder" style="margin-top:0.75rem;">
-          <div class="icon">🗺️</div>
-          <strong>Altair chart — fig3.html</strong>
-          <small>Interaction: click to filter</small>
-        </div>
-      </div>
+      <!-- ── Data ── -->
+      <section id="data">
+        <h2>The data</h2>
+        <!-- <div class="stat-grid">
+          <div class="stat">
+            <div class="stat-label">Observations</div>
+            <div class="stat-value">2,000+</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Features</div>
+            <div class="stat-value">10+</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Scope</div>
+            <div class="stat-value" style="font-size: 15px; line-height: 1.4">
+              US Enterprises
+            </div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Source</div>
+            <div class="stat-value" style="font-size: 14px; line-height: 1.4">
+              Enterprise GenAI Dataset
+            </div>
+          </div>
+        </div> -->
 
-      <!-- Figure 4 — D3 -->
-      <div class="viz-card">
-        <div class="viz-title">Figure 4 · [Chart title]</div>
-        <div class="viz-desc">
-          Takeaway paragraph: what does this chart reveal? How does it connect
-          to your research question?
+        <div class="card">
+          <h3>Data description</h3>
+          <p>
+            Describe your dataset here — where it came from, what each row
+            represents, and what the key columns are. Mention the mix of
+            categorical and continuous features, and explain why this dataset is
+            well-suited for studying GenAI adoption in US enterprises.
+          </p>
+          <p>
+            Also note any limitations: what information might be missing? Are
+            there any collection biases to be aware of?
+          </p>
+          <!-- <div style="margin-top: 0.75rem">
+            <span class="badge badge-blue">Industry</span>
+            <span class="badge badge-blue">Adoption Status</span>
+            <span class="badge badge-teal">Productivity Change (%)</span>
+            <span class="badge badge-teal">Training Hours Provided</span>
+            <span class="badge badge-teal">Number of Employees Impacted</span>
+            <span class="badge badge-amber">New Roles Created</span>
+            <span class="badge badge-purple">Workforce Impact</span>
+          </div> -->
         </div>
-        <span class="badge badge-purple">D3 · brush selection</span>
-        <div class="viz-placeholder" style="margin-top:0.75rem;">
-          <div class="icon">📉</div>
-          <strong>D3 chart — fig4.html</strong>
-          <small>Interaction: brush selection</small>
-        </div>
-      </div>
+      </section>
 
-      <!-- Figure 5 — Altair/D3 -->
-      <div class="viz-card">
-        <div class="viz-title">Figure 5 · [Chart title]</div>
-        <div class="viz-desc">
-          Takeaway paragraph: what does this chart reveal? How does it connect
-          to your research question?
-        </div>
-        <span class="badge badge-teal">Altair / D3 · dropdown filter</span>
-        <div class="viz-placeholder" style="margin-top:0.75rem;">
-          <div class="icon">🔵</div>
-          <strong>Chart — fig5.html</strong>
-          <small>Interaction: dropdown filter</small>
-        </div>
-      </div>
+      <!-- ── visualizations ── -->
+      <section id="visualizations">
+        <h2>Visualizations</h2>
 
-    </div><!-- end viz-grid -->
-  </section>
+        <!-- avg productivity impact by industry -->
+        <div class="viz-card">
+          <div class="viz-title">
+            Figure 1 · Average Productivity Impact by Industry
+          </div>
+          <div class="viz-desc">description text</div>
+          <span class="badge badge-teal">Matplotlib</span>
+          <img
+            src="fig_prod_impact.png"
+            class="chart-img"
+            alt="Average Productivity Impact of GenAI by Industry"
+          />
+        </div>
 
-  <!-- ── Findings ── -->
-  <section id="findings">
-    <h2>Summary &amp; findings</h2>
-    <div class="summary-grid">
-      <div class="summary-item">
-        <div class="summary-num">Finding 01</div>
-        <h3>Key conclusion</h3>
-        <p>Describe what you discovered. Connect it back to your original
-        research question and discuss any implications.</p>
-      </div>
-      <div class="summary-item">
-        <div class="summary-num">Finding 02</div>
-        <h3>Key conclusion</h3>
-        <p>Describe what you discovered. Connect it back to your original
-        research question and discuss any implications.</p>
-      </div>
-      <div class="summary-item">
-        <div class="summary-num">Finding 03</div>
-        <h3>Key conclusion</h3>
-        <p>Describe what you discovered. Connect it back to your original
-        research question and discuss any implications.</p>
-      </div>
-      <div class="summary-item">
-        <div class="summary-num">Future work</div>
-        <h3>What's next</h3>
-        <p>Describe limitations of the current analysis and suggest directions
-        for future research or better data collection.</p>
-      </div>
+        <!-- productivity impact with standard error -->
+        <div class="viz-card">
+          <div class="viz-title">
+            Figure 2 · Productivity Impact with Standard Error
+          </div>
+          <div class="viz-desc">description</div>
+          <span class="badge badge-teal">Matplotlib</span>
+          <img
+            src="fig_prod_change_se.png"
+            class="chart-img"
+            alt="Productivity Impact by Industry with Standard Error"
+          />
+        </div>
+
+        <!-- workforce impact distribution by industry with hover tooltip -->
+        <div class="viz-card">
+          <div class="viz-title">
+            Figure 3 · Workforce Impact Distribution by Industry
+          </div>
+          <div class="viz-desc">description</div>
+          <span class="badge badge-purple">Altair</span>
+          <iframe
+            src="fig_industry_impact.html"
+            height="480"
+            scrolling="no"
+          ></iframe>
+        </div>
+
+        <!--training roi by company size with dropdwon filter-->
+        <div class="viz-card">
+          <div class="viz-title">Figure 4 · Training ROI by Company Size</div>
+          <div class="viz-desc">description</div>
+          <span class="badge badge-blue">Altair</span>
+          <iframe src="fig_roi.html" height="480" scrolling="no"></iframe>
+        </div>
+
+        <!-- industry x workforce impact heatmap with hover tooltip, toggle, sort -->
+        <div class="viz-card">
+          <div class="viz-title">
+            Figure 5 · Industry × Workforce Impact Heatmap
+          </div>
+          <div class="viz-desc">description</div>
+          <span class="badge badge-amber">D3</span>
+          <iframe src="fig_heatmap.html" height="580" scrolling="no"></iframe>
+        </div>
+      </section>
+
+      <!-- ── findings ── -->
+      <section id="findings">
+        <h2>Summary &amp; findings</h2>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-num">Finding 01</div>
+            <h3>Key conclusion</h3>
+            <p></p>
+          </div>
+          <div class="summary-item">
+            <div class="summary-num">Finding 02</div>
+            <h3>Key conclusion</h3>
+            <p></p>
+          </div>
+          <div class="summary-item">
+            <div class="summary-num">Finding 03</div>
+            <h3>Key conclusion</h3>
+            <p></p>
+          </div>
+          <div class="summary-item">
+            <div class="summary-num">Future work</div>
+            <h3>What's next</h3>
+            <p></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── team ── -->
+      <section>
+        <h2>Team</h2>
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="team-name">Maya</div>
+            <div class="team-role"></div>
+          </div>
+          <div class="team-card">
+            <div class="team-name">Saanvi</div>
+            <div class="team-role"></div>
+          </div>
+          <div class="team-card">
+            <div class="team-name">Aashka</div>
+            <div class="team-role"></div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        DS4200 · Information Presentation and Data Visualization · Northeastern
+        University · Spring 2025
+      </footer>
     </div>
-  </section>
-
-  <!-- ── References ── -->
-  <section id="references">
-    <h2>References</h2>
-    <div class="card">
-      <ul class="ref-list">
-        <li data-n="[1]">
-          Author, A. &amp; Author, B. (Year). <em>Paper title.</em> Journal Name.
-          <a href="#">doi:10.xxxx/xxxxx</a>
-        </li>
-        <li data-n="[2]">
-          Author, C. (Year). <em>Paper title.</em> Conference Name.
-          <a href="#">doi:10.xxxx/xxxxx</a>
-        </li>
-        <li data-n="[3]">
-          Dataset source name. (Year). <em>Dataset title.</em>
-          <a href="#">Link to data source</a>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ── Team ── -->
-  <section>
-    <h2>Team</h2>
-    <div class="team-grid">
-      <div class="team-card">
-        <div class="team-name">Member 1</div>
-        <div class="team-role">Data cleaning, Altair visualizations</div>
-      </div>
-      <div class="team-card">
-        <div class="team-name">Member 2</div>
-        <div class="team-role">D3 interactive charts, JavaScript</div>
-      </div>
-      <div class="team-card">
-        <div class="team-name">Member 3</div>
-        <div class="team-role">HTML/CSS layout, written analysis</div>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    DS4200 · Information Presentation and Data Visualization · Northeastern University · Spring 2025
-  </footer>
-
-</div><!-- .site -->
-</body>
+  </body>
 </html>
