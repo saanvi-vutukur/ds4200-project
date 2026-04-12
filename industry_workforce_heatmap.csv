@@ -1,0 +1,57 @@
+Industry,Workforce Impact,Count
+Advertising,Job Loss / Risk,96
+Advertising,No Clear Impact,228
+Advertising,Reskilling,53
+Advertising,Role Change,122
+Defense,Job Loss / Risk,99
+Defense,No Clear Impact,227
+Defense,Reskilling,47
+Defense,Role Change,114
+Education,Job Loss / Risk,96
+Education,No Clear Impact,226
+Education,Reskilling,51
+Education,Role Change,137
+Entertainment,Job Loss / Risk,84
+Entertainment,No Clear Impact,216
+Entertainment,Reskilling,53
+Entertainment,Role Change,158
+Finance,Job Loss / Risk,104
+Finance,No Clear Impact,221
+Finance,Reskilling,49
+Finance,Role Change,132
+Healthcare,Job Loss / Risk,90
+Healthcare,No Clear Impact,248
+Healthcare,Reskilling,52
+Healthcare,Role Change,113
+Hospitality,Job Loss / Risk,85
+Hospitality,No Clear Impact,234
+Hospitality,Reskilling,58
+Hospitality,Role Change,111
+Legal Services,Job Loss / Risk,117
+Legal Services,No Clear Impact,223
+Legal Services,Reskilling,47
+Legal Services,Role Change,116
+Manufacturing,Job Loss / Risk,105
+Manufacturing,No Clear Impact,241
+Manufacturing,Reskilling,62
+Manufacturing,Role Change,118
+Retail,Job Loss / Risk,114
+Retail,No Clear Impact,216
+Retail,Reskilling,57
+Retail,Role Change,130
+Technology,Job Loss / Risk,92
+Technology,No Clear Impact,225
+Technology,Reskilling,56
+Technology,Role Change,111
+Telecom,Job Loss / Risk,100
+Telecom,No Clear Impact,224
+Telecom,Reskilling,52
+Telecom,Role Change,121
+Transportation,Job Loss / Risk,88
+Transportation,No Clear Impact,221
+Transportation,Reskilling,36
+Transportation,Role Change,148
+Utilities,Job Loss / Risk,125
+Utilities,No Clear Impact,222
+Utilities,Reskilling,46
+Utilities,Role Change,140

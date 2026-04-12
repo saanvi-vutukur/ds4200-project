@@ -333,9 +333,24 @@
       <!-- ── intro section ── -->
       <div class="hero" id="intro">
         <h1>Enterprise Adoption of AI Tools</h1>
-        <p>filler text</p>
+        <p>
+          The rapid adoption of generative AI tools across industries has raised
+          pressing questions about the uniformity of their impact. Although
+          tools like ChatGPT, Claude, and Gemini are broadly accessible, the
+          extent to which firms integrate these technologies — and the outcomes
+          they experience — varies significantly by sector. Industries such as
+          Finance and Technology may invest in different tools, commit varying
+          levels of training, and see distinct workforce outcomes compared to
+          sectors like Healthcare. Understanding these differences is essential
+          for business leaders and policymakers seeking to maximize the benefits
+          of GenAI while addressing disparities in productivity and workforce
+          impact. This analysis draws on a filtered subset of over 7,000
+          US-based enterprise observations spanning 14 industries. Through five
+          visualizations, we examine productivity differences across sectors,
+          workforce outcome distributions, and how company size shapes the
+          return on AI training investment.
+        </p>
         <div class="meta">
-          <span>Spring 2026</span>
           <span> Saanvi Vutukur, Maya Korintholil, Aashka Dave</span>
         </div>
       </div>
@@ -369,14 +384,29 @@
         <div class="card">
           <h3>Data description</h3>
           <p>
-            Describe your dataset here — where it came from, what each row
-            represents, and what the key columns are. Mention the mix of
-            categorical and continuous features, and explain why this dataset is
-            well-suited for studying GenAI adoption in US enterprises.
+            <u>Dataset</u>: Enterprise GenAI Adoption and Workforce Impact
+            (Kaggle). Each row represents a single enterprise's self-reported
+            survey response. The original dataset contains 100,000 observations
+            across 10 columns; we filtered to US-based enterprises only,
+            yielding approximately 7,000 rows spanning 14 industries.
           </p>
           <p>
-            Also note any limitations: what information might be missing? Are
-            there any collection biases to be aware of?
+            <u>Key Columns</u>: Industry, Company Size, GenAI Tool used,
+            Adoption Year, Number of Employees Impacted, New Roles Created,
+            Training Hours Provided, Productivity Change (%), and Employee
+            Sentiment. We engineered three additional features: Years Since
+            Adoption, Training Hours per Employee, and Training ROI. This brings
+            the total to 13 columns with a strong mix of categorical and
+            continuous variables.
+          </p>
+          <p>
+            <u>Limitations</u>: The dataset is survey-based, so productivity
+            change figures are self-reported and may reflect perceived rather
+            than objectively measured outcomes. The dataset does not distinguish
+            between tool usage intensity (occasional vs. deep integration), and
+            the US-only filter, while intentional, limits generalizability. Some
+            industries have slightly unequal sample sizes, which may affect
+            cross-sector comparisons.
           </p>
           <!-- <div style="margin-top: 0.75rem">
             <span class="badge badge-blue">Industry</span>
@@ -399,7 +429,18 @@
           <div class="viz-title">
             Figure 1 · Average Productivity Impact by Industry
           </div>
-          <div class="viz-desc">description text</div>
+          <div class="viz-desc">
+            This dot plot shows the average self-reported productivity change
+            (%) for each of the 14 industries in our dataset, with a dashed
+            vertical line marking the overall mean of approximately 18.6%.
+            Technology leads all sectors with an average productivity gain near
+            19.3%, followed by Retail and Telecom. Entertainment, Healthcare,
+            and Finance cluster at the lower end, notably below the mean. The
+            spread across industries is relatively narrow (roughly 1 percentage
+            point separates the lowest from the highest), suggesting that GenAI
+            provides productivity benefits broadly, but the degree of benefit is
+            meaningfully differentiated by sector.
+          </div>
           <span class="badge badge-teal">Matplotlib</span>
           <img
             src="fig_prod_impact.png"
@@ -413,7 +454,19 @@
           <div class="viz-title">
             Figure 2 · Productivity Impact with Standard Error
           </div>
-          <div class="viz-desc">description</div>
+          <div class="viz-desc">
+            Adding standard error bars reveals important nuance beyond the point
+            estimates in Figure 1. Industries like Technology and Retail not
+            only have higher average productivity gains, but their confidence
+            intervals do not overlap with those of lower-performing sectors like
+            Entertainment and Healthcare. This suggests that these differences
+            are statistically meaningful. Conversely, industries such as
+            Hospitality, Education, and Legal Services show wide error bars,
+            indicating high variability in enterprise experiences within those
+            sectors. This suggests that for some industries, the benefit of
+            GenAI adoption depends heavily on firm-specific factors such as
+            implementation quality or workforce readiness.
+          </div>
           <span class="badge badge-teal">Matplotlib</span>
           <img
             src="fig_prod_change_se.png"
@@ -427,7 +480,20 @@
           <div class="viz-title">
             Figure 3 · Workforce Impact Distribution by Industry
           </div>
-          <div class="viz-desc">description</div>
+          <div class="viz-desc">
+            This stacked bar chart shows what proportion of companies in each
+            industry experienced each of four workforce outcomes: “Reskilling &
+            Growth”, “Role Change”, “No Major Impact”, and “Job Loss Risk”.
+            Across all industries, "No Major Impact" is the dominant outcome,
+            accounting for roughly 55–60% of enterprises. “Reskilling & Growth”
+            is the second most common outcome (around 38–43%), while “Job Loss
+            Risk” remains the smallest category across all sectors. Healthcare
+            and Transportation show slightly elevated “Reskilling & Growth”
+            proportions, while Finance and Hospitality show slightly higher “Job
+            Loss Risk” compared to peers. Overall, the chart suggests that GenAI
+            adoption is more often a catalyst for workforce evolution than
+            displacement. n
+          </div>
           <span class="badge badge-purple">Altair</span>
           <iframe
             src="fig_industry_impact.html"
@@ -439,7 +505,20 @@
         <!--training roi by company size with dropdwon filter-->
         <div class="viz-card">
           <div class="viz-title">Figure 4 · Training ROI by Company Size</div>
-          <div class="viz-desc">description</div>
+          <div class="viz-desc">
+            This bar chart demonstrates that the return on GenAI training
+            investment scales dramatically with company size. Small companies
+            report an average Training ROI near 50, while medium companies reach
+            approximately 185, large companies approximately 460, and
+            enterprise-scale organizations approach 740. This likely reflects
+            economies of scale in AI deployment, where larger firms can spread
+            training costs across more employees, benefit from deeper
+            infrastructure integration, and absorb the upfront investment more
+            efficiently. The interactive industry filter allows users to verify
+            that this pattern holds broadly across sectors, with some industries
+            (like Transportation and Utilities) showing even steeper
+            enterprise-size premiums.
+          </div>
           <span class="badge badge-blue">Altair</span>
           <iframe src="fig_roi.html" height="480" scrolling="no"></iframe>
         </div>
@@ -449,9 +528,27 @@
           <div class="viz-title">
             Figure 5 · Industry × Workforce Impact Heatmap
           </div>
-          <div class="viz-desc">description</div>
+          <div class="viz-desc">
+            This interactive heatmap allows direct comparison of how GenAI
+            adoption outcomes are distributed across all 14 industries
+            simultaneously. Each cell shows either the raw count or the
+            percentage of enterprises in that industry reporting a given
+            workforce impact. "No Major Impact" (black) is consistently the
+            largest category everywhere, but the relative balance between
+            "Reskilling & Growth" (blue) and "Role Change" (purple) varies by
+            sector. Manufacturing and Transportation show relatively higher
+            Reskilling & Growth shares, while Finance and Hospitality show
+            comparatively higher Job Loss Risk (orange). The sort control lets
+            users reorder industries by any impact category to quickly surface
+            which sectors are most exposed to workforce disruption.
+          </div>
           <span class="badge badge-amber">D3</span>
-          <iframe src="fig_heatmap.html" height="580" scrolling="no"></iframe>
+          <iframe
+            src="heatmap.html"
+            height="750"
+            scrolling="no"
+            style="overflow: hidden"
+          ></iframe>
         </div>
       </section>
 
@@ -460,30 +557,58 @@
         <h2>Summary &amp; findings</h2>
         <div class="summary-grid">
           <div class="summary-item">
-            <div class="summary-num">Finding 01</div>
-            <h3>Key conclusion</h3>
+            <div class="summary-num">
+              Unequal Productivity Gains Across Sectors
+            </div>
+            <h3>
+              Productivity gains from GenAI are real but unequal. Technology,
+              Retail, and Telecom see the strongest average improvements, while
+              Entertainment, Healthcare, and Finance lag behind. This suggests
+              that sector-specific barriers (regulatory constraints, workflow
+              complexity, or data sensitivity) moderate how much productivity
+              value enterprises extract from these tools.
+            </h3>
             <p></p>
           </div>
           <div class="summary-item">
-            <div class="summary-num">Finding 02</div>
-            <h3>Key conclusion</h3>
+            <div class="summary-num">Reskilling Dominates Over Job Loss</div>
+            <h3>
+              The dominant workforce outcome of GenAI adoption is not
+              displacement but evolution. "No Major Impact" and "Reskilling &
+              Growth" together account for the vast majority of outcomes in
+              every industry. Job Loss Risk is present but consistently the
+              smallest category, countering the most alarming narratives around
+              AI and employment.
+            </h3>
             <p></p>
           </div>
           <div class="summary-item">
-            <div class="summary-num">Finding 03</div>
-            <h3>Key conclusion</h3>
+            <div class="summary-num">Size Drives Training ROI</div>
+            <h3>
+              Company size is the single strongest predictor of Training ROI.
+              Enterprise-scale organizations extract nearly 15 times the
+              training return of small companies. This gap suggests that
+              policymakers and smaller firms should focus on scaling training
+              programs and sharing best practices to close the size-based
+              advantage gap.
+            </h3>
             <p></p>
           </div>
           <div class="summary-item">
             <div class="summary-num">Future work</div>
-            <h3>What's next</h3>
+            <h3>
+              Future work could examine how these patterns shift as adoption
+              matures beyond 2024, explore differences between specific GenAI
+              tools (e.g., ChatGPT vs. Copilot), or incorporate objective
+              productivity measures rather than self-reported estimates.
+            </h3>
             <p></p>
           </div>
         </div>
       </section>
 
       <!-- ── team ── -->
-      <section>
+      <!-- <section>
         <h2>Team</h2>
         <div class="team-grid">
           <div class="team-card">
@@ -499,11 +624,11 @@
             <div class="team-role"></div>
           </div>
         </div>
-      </section>
+      </section> -->
 
       <footer>
         DS4200 · Information Presentation and Data Visualization · Northeastern
-        University · Spring 2025
+        University · Spring 2026
       </footer>
     </div>
   </body>

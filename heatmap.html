@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Industry vs Workforce Impact Heatmap</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 10px;
+      }
+
+      .title {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .tooltip {
+        position: absolute;
+        background: white;
+        border: 1px solid #ccc;
+        padding: 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        pointer-events: none;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="title">Industry vs Workforce Impact Heatmap</div>
+    <svg id="chart" width="100%" height="700"></svg>
+    <div class="tooltip"></div>
+
+    <script>
+      const svg = d3.select("#chart");
+      const tooltip = d3.select(".tooltip");
+
+      const margin = { top: 40, right: 20, bottom: 120, left: 220 };
+      const width =
+        document.getElementById("chart").clientWidth -
+        margin.left -
+        margin.right;
+      const height = 700 - margin.top - margin.bottom;
+
+      const g = svg
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+      d3.csv("industry_workforce_heatmap.csv").then(function (data) {
+        data.forEach(function (d) {
+          d.Count = +d.Count;
+        });
+
+        const impacts = Array.from(
+          new Set(data.map((d) => d["Workforce Impact"]))
+        );
+        const industries = Array.from(new Set(data.map((d) => d["Industry"])));
+
+        const x = d3
+          .scaleBand()
+          .domain(impacts)
+          .range([0, width])
+          .padding(0.05);
+
+        const y = d3
+          .scaleBand()
+          .domain(industries)
+          .range([0, height])
+          .padding(0.05);
+
+        // 🔥 UPDATED COLOR SCALE (better palette)
+        const color = d3
+          .scaleSequential()
+          .interpolator(d3.interpolateYlOrRd)
+          .domain([0, d3.max(data, (d) => d.Count)]);
+
+        // X axis
+        g.append("g")
+          .attr("transform", `translate(0,${height})`)
+          .call(d3.axisBottom(x))
+          .selectAll("text")
+          .attr("transform", "rotate(-30)")
+          .style("text-anchor", "end");
+
+        // Y axis
+        g.append("g").call(d3.axisLeft(y));
+
+        // Heatmap cells
+        g.selectAll("rect")
+          .data(data)
+          .enter()
+          .append("rect")
+          .attr("x", (d) => x(d["Workforce Impact"]))
+          .attr("y", (d) => y(d["Industry"]))
+          .attr("width", x.bandwidth())
+          .attr("height", y.bandwidth())
+          .attr("fill", (d) => color(d.Count))
+          .on("mouseover", function (event, d) {
+            tooltip.style("opacity", 1).html(
+              `<strong>Industry:</strong> ${d["Industry"]}<br>
+               <strong>Impact:</strong> ${d["Workforce Impact"]}<br>
+               <strong>Count:</strong> ${d.Count}`
+            );
+          })
+          .on("mousemove", function (event) {
+            tooltip
+              .style("left", event.pageX + 10 + "px")
+              .style("top", event.pageY - 28 + "px");
+          })
+          .on("mouseout", function () {
+            tooltip.style("opacity", 0);
+          });
+
+        // Cell labels
+        g.selectAll(".cell-label")
+          .data(data)
+          .enter()
+          .append("text")
+          .attr("x", (d) => x(d["Workforce Impact"]) + x.bandwidth() / 2)
+          .attr("y", (d) => y(d["Industry"]) + y.bandwidth() / 2)
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle")
+          .attr("font-size", "10px")
+          .attr("fill", (d) =>
+            d.Count > d3.max(data, (d) => d.Count) * 0.5 ? "white" : "black"
+          )
+          .text((d) => d.Count);
+      });
+    </script>
+  </body>
+</html>
