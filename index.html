@@ -399,16 +399,17 @@
             Figure 1 · Distribution of Productivity Changes by Industry
           </div>
           <div class="viz-desc">
-            This dot plot shows the average self-reported productivity change
-            (%) for each of the 14 industries in our dataset, with a dashed
-            vertical line marking the overall mean of approximately 18.6%.
-            Technology leads all sectors with an average productivity gain near
-            19.3%, followed by Retail and Telecom. Entertainment, Healthcare,
-            and Finance cluster at the lower end, notably below the mean. The
-            spread across industries is relatively narrow (roughly 1 percentage
-            point separates the lowest from the highest), suggesting that GenAI
-            provides productivity benefits broadly, but the degree of benefit is
-            meaningfully differentiated by sector.
+            This figure shows the full distribution of productivity change (%)
+            across industries using a boxplot. Unlike a simple average-based
+            chart, the boxplot highlights median values, interquartile ranges,
+            and outliers, making it easier to compare both central tendency and
+            variability across sectors. Industries such as Technology and Retail
+            show relatively higher medians and tighter distributions, suggesting
+            more consistent productivity gains, while sectors like Healthcare
+            and Finance show wider spreads, indicating more uneven outcomes
+            across firms. Overall, the visualization emphasizes that GenAI
+            impact is not only different in magnitude across industries but also
+            in consistency of outcomes within industries.
           </div>
           <span class="badge badge-teal">Altair</span>
           <iframe
@@ -425,17 +426,16 @@
             Figure 2 · Productivity Impact with Standard Error
           </div>
           <div class="viz-desc">
-            Adding standard error bars reveals important nuance beyond the point
-            estimates in Figure 1. Industries like Technology and Retail not
-            only have higher average productivity gains, but their confidence
-            intervals do not overlap with those of lower-performing sectors like
-            Entertainment and Healthcare. This suggests that these differences
-            are statistically meaningful. Conversely, industries such as
-            Hospitality, Education, and Legal Services show wide error bars,
-            indicating high variability in enterprise experiences within those
-            sectors. This suggests that for some industries, the benefit of
-            GenAI adoption depends heavily on firm-specific factors such as
-            implementation quality or workforce readiness.
+            Industries like Technology and Retail not only have higher average
+            productivity gains, but their confidence intervals do not overlap
+            with those of lower-performing sectors like Entertainment and
+            Healthcare. This suggests that these differences are statistically
+            meaningful. Conversely, industries such as Hospitality, Education,
+            and Legal Services show wide error bars, indicating high variability
+            in enterprise experiences within those sectors. This suggests that
+            for some industries, the benefit of GenAI adoption depends heavily
+            on firm-specific factors such as implementation quality or workforce
+            readiness.
           </div>
           <span class="badge badge-teal">Matplotlib</span>
           <img
@@ -451,18 +451,19 @@
             Figure 3 · Hours Training vs Productivity with ROI Insight
           </div>
           <div class="viz-desc">
-            This stacked bar chart shows what proportion of companies in each
-            industry experienced each of four workforce outcomes: “Reskilling &
-            Growth”, “Role Change”, “No Major Impact”, and “Job Loss Risk”.
-            Across all industries, "No Major Impact" is the dominant outcome,
-            accounting for roughly 55–60% of enterprises. “Reskilling & Growth”
-            is the second most common outcome (around 38–43%), while “Job Loss
-            Risk” remains the smallest category across all sectors. Healthcare
-            and Transportation show slightly elevated “Reskilling & Growth”
-            proportions, while Finance and Hospitality show slightly higher “Job
-            Loss Risk” compared to peers. Overall, the chart suggests that GenAI
-            adoption is more often a catalyst for workforce evolution than
-            displacement. n
+            This multivariate scatterplot explores the relationship between
+            training investment and productivity outcomes across enterprises.
+            The x-axis represents Training Hours per Employee, while the y-axis
+            shows Productivity Change (%), allowing direct assessment of whether
+            higher training investment is associated with improved performance.
+            Each point represents a firm, and color encodes industry, enabling
+            cross-sector comparison within the same space. Point size reflects
+            Training ROI, adding a third dimension that highlights how
+            efficiently training translates into returns. The visualization
+            shows a weak but positive relationship overall, with significant
+            variation across industries, suggesting that training effectiveness
+            depends more on implementation quality and industry context than on
+            training volume alone.
           </div>
           <span class="badge badge-purple">Altair</span>
           <iframe
@@ -477,18 +478,16 @@
         <div class="viz-card">
           <div class="viz-title">Figure 4 · Training ROI by Company Size</div>
           <div class="viz-desc">
-            This bar chart demonstrates that the return on GenAI training
-            investment scales dramatically with company size. Small companies
-            report an average Training ROI near 50, while medium companies reach
-            approximately 185, large companies approximately 460, and
-            enterprise-scale organizations approach 740. This likely reflects
-            economies of scale in AI deployment, where larger firms can spread
-            training costs across more employees, benefit from deeper
-            infrastructure integration, and absorb the upfront investment more
-            efficiently. The interactive industry filter allows users to verify
-            that this pattern holds broadly across sectors, with some industries
-            (like Transportation and Utilities) showing even steeper
-            enterprise-size premiums.
+            This grouped bar chart compares average Training ROI across company
+            sizes within each industry. Instead of aggregating values, the
+            visualization keeps each company size separate to allow direct
+            comparison at the same scale. The results show a clear monotonic
+            trend: enterprise firms consistently achieve the highest training
+            ROI, followed by large, medium, and small companies. This pattern
+            holds across most industries, although the magnitude varies slightly
+            depending on sector. The interactive industry filter allows users to
+            isolate specific sectors and verify whether the size effect is
+            consistent or driven by particular industries.
           </div>
           <span class="badge badge-blue">Altair</span>
           <iframe src="fig_roi_group.html" height="480" scrolling="no"></iframe>
