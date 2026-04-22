@@ -358,28 +358,6 @@
       <!-- ── Data ── -->
       <section id="data">
         <h2>The data</h2>
-        <!-- <div class="stat-grid">
-          <div class="stat">
-            <div class="stat-label">Observations</div>
-            <div class="stat-value">2,000+</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Features</div>
-            <div class="stat-value">10+</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Scope</div>
-            <div class="stat-value" style="font-size: 15px; line-height: 1.4">
-              US Enterprises
-            </div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Source</div>
-            <div class="stat-value" style="font-size: 14px; line-height: 1.4">
-              Enterprise GenAI Dataset
-            </div>
-          </div>
-        </div> -->
 
         <div class="card">
           <h3>Data description</h3>
@@ -408,15 +386,6 @@
             industries have slightly unequal sample sizes, which may affect
             cross-sector comparisons.
           </p>
-          <!-- <div style="margin-top: 0.75rem">
-            <span class="badge badge-blue">Industry</span>
-            <span class="badge badge-blue">Adoption Status</span>
-            <span class="badge badge-teal">Productivity Change (%)</span>
-            <span class="badge badge-teal">Training Hours Provided</span>
-            <span class="badge badge-teal">Number of Employees Impacted</span>
-            <span class="badge badge-amber">New Roles Created</span>
-            <span class="badge badge-purple">Workforce Impact</span>
-          </div> -->
         </div>
       </section>
 
@@ -427,7 +396,7 @@
         <!-- avg productivity impact by industry -->
         <div class="viz-card">
           <div class="viz-title">
-            Figure 1 · Average Productivity Impact by Industry
+            Figure 1 · Distribution of Productivity Changes by Industry
           </div>
           <div class="viz-desc">
             This dot plot shows the average self-reported productivity change
@@ -441,12 +410,13 @@
             provides productivity benefits broadly, but the degree of benefit is
             meaningfully differentiated by sector.
           </div>
-          <span class="badge badge-teal">Matplotlib</span>
-          <img
-            src="fig_prod_impact.png"
-            class="chart-img"
-            alt="Average Productivity Impact of GenAI by Industry"
-          />
+          <span class="badge badge-teal">Altair</span>
+          <iframe
+            src="fig1_productivity_distribution2.html"
+            height="600"
+            scrolling="no"
+            style="overflow: visible"
+          ></iframe>
         </div>
 
         <!-- productivity impact with standard error -->
@@ -478,7 +448,7 @@
         <!-- workforce impact distribution by industry with hover tooltip -->
         <div class="viz-card">
           <div class="viz-title">
-            Figure 3 · Workforce Impact Distribution by Industry
+            Figure 3 · Hours Training vs Productivity with ROI Insight
           </div>
           <div class="viz-desc">
             This stacked bar chart shows what proportion of companies in each
@@ -496,10 +466,11 @@
           </div>
           <span class="badge badge-purple">Altair</span>
           <iframe
-            src="fig_industry_impact.html"
-            height="480"
+            src="fig_training_vs_productivity2.html"
+            height="500"
             scrolling="no"
-          ></iframe>
+          >
+          </iframe>
         </div>
 
         <!--training roi by company size with dropdwon filter-->
@@ -520,7 +491,7 @@
             enterprise-size premiums.
           </div>
           <span class="badge badge-blue">Altair</span>
-          <iframe src="fig_roi.html" height="480" scrolling="no"></iframe>
+          <iframe src="fig_roi_group.html" height="480" scrolling="no"></iframe>
         </div>
 
         <!-- industry x workforce impact heatmap with hover tooltip, toggle, sort -->
@@ -606,25 +577,6 @@
           </div>
         </div>
       </section>
-
-      <!-- ── team ── -->
-      <!-- <section>
-        <h2>Team</h2>
-        <div class="team-grid">
-          <div class="team-card">
-            <div class="team-name">Maya</div>
-            <div class="team-role"></div>
-          </div>
-          <div class="team-card">
-            <div class="team-name">Saanvi</div>
-            <div class="team-role"></div>
-          </div>
-          <div class="team-card">
-            <div class="team-name">Aashka</div>
-            <div class="team-role"></div>
-          </div>
-        </div>
-      </section> -->
 
       <footer>
         DS4200 · Information Presentation and Data Visualization · Northeastern

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #vis.vega-embed { width: 100%; display: flex; }
+    #vis.vega-embed details,
+    #vis.vega-embed details summary { position: relative; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/vega@6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@6.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@7"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
+        "config": {"view": {"continuousWidth": 300, "continuousHeight": 300}},
+        "data": {"name": "data"},
+        "mark": {"type": "circle", "opacity": 0.65, "size": 60},
+        "params": [
+          {
+            "name": "industry_select",
+            "select": {"type": "point", "fields": ["Industry"]},
+            "bind": "legend"
+          },
+          {
+            "name": "filter_industry",
+            "bind": {
+              "input": "select",
+              "options": ["All Industries","Advertising","Defense","Education","Entertainment","Finance","Healthcare","Hospitality","Legal Services","Manufacturing","Retail","Technology","Telecom","Transportation","Utilities"],
+              "name": "Filter by Industry:  "
+            },
+            "value": "All Industries"
+          }
+        ],
+        "transform": [
+          {
+            "filter": "(filter_industry === 'All Industries') || (datum['Industry'] === filter_industry)"
+          }
+        ],
+        "encoding": {
+          "x": {
+            "field": "Training Hours per Employee",
+            "type": "quantitative",
+            "title": "Training Hours per Employee",
+            "axis": {"grid": true}
+          },
+          "y": {
+            "field": "Productivity Change (%)",
+            "type": "quantitative",
+            "title": "Productivity Change (%)",
+            "axis": {"grid": true},
+            "scale": {"zero": false}
+          },
+          "color": {
+            "field": "Industry",
+            "type": "nominal",
+            "legend": {"title": "Industry"},
+            "scale": {
+              "domain": ["Advertising","Defense","Education","Entertainment","Finance","Healthcare","Hospitality","Legal Services","Manufacturing","Retail","Technology","Telecom","Transportation","Utilities"],
+              "range": ["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf","#aec7e8","#ffbb78","#98df8a","#ff9896"]
+            }
+          },
+          "opacity": {
+            "condition": {"param": "industry_select", "value": 0.75},
+            "value": 0.1
+          },
+          "tooltip": [
+            {"field": "Industry", "type": "nominal", "title": "Industry"},
+            {"field": "Training Hours per Employee", "type": "quantitative", "format": ".2f", "title": "Training Hrs / Employee"},
+            {"field": "Productivity Change (%)", "type": "quantitative", "format": ".2f", "title": "Productivity Change (%)"},
+            {"field": "Training ROI", "type": "quantitative", "format": ".2f", "title": "Training ROI"}
+          ]
+        },
+        "layer": [
+          {
+            "mark": {"type": "circle", "opacity": 0.65, "size": 60}
+          },
+          {
+            "mark": {"type": "line", "color": "#aaaaaa", "strokeDash": [4,3], "strokeWidth": 1.5},
+            "transform": [{"regression": "Productivity Change (%)", "on": "Training Hours per Employee"}],
+            "encoding": {
+              "color": {"value": "#aaaaaa"},
+              "opacity": {"value": 1}
+            }
+          }
+        ],
+        "height": 380,
+        "width": 620,
+        "title": {
+          "text": "Training Hours per Employee vs. Productivity Change",
+          "anchor": "start",
+          "fontSize": 16,
+          "subtitle": "Each point is a US enterprise. Click a legend entry to highlight an industry. Dashed line = overall trend.",
+          "subtitleFontSize": 12,
+          "subtitleColor": "#555"
+        },
+        "datasets": {
+          "data": []
+        }
+      };
+
+      // The chart uses a CSV loader approach — data is injected via fetch so it
+      // works when the file is served alongside the CSV.
+      // IMPORTANT: serve this file from the same directory as the CSV.
+      fetch("Enterprise_GenAI_Adoption_Impact.csv")
+        .then(r => r.text())
+        .then(text => {
+          const rows = text.trim().split("\n");
+          const headers = rows[0].split(",").map(h => h.trim().replace(/"/g, ""));
+          const data = rows.slice(1).map(row => {
+            const vals = row.split(",");
+            const obj = {};
+            headers.forEach((h, i) => { obj[h] = vals[i] ? vals[i].trim().replace(/"/g, "") : ""; });
+            return obj;
+          });
+
+          // Filter USA, compute derived columns, clean
+          const usa = data
+            .filter(d => d["Country"] === "USA")
+            .map(d => {
+              const emp = parseFloat(d["Number of Employees Impacted"]);
+              const hrs = parseFloat(d["Training Hours Provided"]);
+              const prod = parseFloat(d["Productivity Change (%)"]);
+              const hrsPerEmp = emp > 0 ? +(hrs / emp).toFixed(3) : null;
+              const roi = hrsPerEmp > 0 ? +(prod / hrsPerEmp).toFixed(3) : null;
+              return {
+                "Industry": d["Industry"],
+                "Training Hours per Employee": hrsPerEmp,
+                "Productivity Change (%)": prod,
+                "Training ROI": roi
+              };
+            })
+            .filter(d =>
+              d["Training Hours per Employee"] != null &&
+              d["Training ROI"] != null &&
+              isFinite(d["Training Hours per Employee"]) &&
+              isFinite(d["Training ROI"]) &&
+              d["Training Hours per Employee"] > 0
+            );
+
+          // Cap ROI at 95th percentile to match original notebook
+          const rois = usa.map(d => d["Training ROI"]).sort((a,b)=>a-b);
+          const cap = rois[Math.floor(rois.length * 0.95)];
+          usa.forEach(d => { d["Training ROI Capped"] = Math.min(d["Training ROI"], cap); });
+
+          spec.datasets["data"] = usa;
+
+          // Simplify spec now that data is inline — remove layer/regression for
+          // compatibility; keep single mark layer
+          const finalSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
+            "config": {"view": {"continuousWidth": 300, "continuousHeight": 300}},
+            "data": {"values": usa},
+            "params": [
+              {
+                "name": "industry_select",
+                "select": {"type": "point", "fields": ["Industry"]},
+                "bind": "legend"
+              },
+              {
+                "name": "filter_industry",
+                "bind": {
+                  "input": "select",
+                  "options": ["All Industries","Advertising","Defense","Education","Entertainment","Finance","Healthcare","Hospitality","Legal Services","Manufacturing","Retail","Technology","Telecom","Transportation","Utilities"],
+                  "name": "Filter by Industry:  "
+                },
+                "value": "All Industries"
+              }
+            ],
+            "transform": [
+              {"filter": "(filter_industry === 'All Industries') || (datum['Industry'] === filter_industry)"}
+            ],
+            "layer": [
+              {
+                "mark": {"type": "circle", "opacity": 0.6, "size": 55},
+                "encoding": {
+                  "x": {
+                    "field": "Training Hours per Employee",
+                    "type": "quantitative",
+                    "title": "Training Hours per Employee",
+                    "axis": {"grid": true}
+                  },
+                  "y": {
+                    "field": "Productivity Change (%)",
+                    "type": "quantitative",
+                    "title": "Productivity Change (%)",
+                    "axis": {"grid": true},
+                    "scale": {"zero": false}
+                  },
+                  "color": {
+                    "field": "Industry",
+                    "type": "nominal",
+                    "legend": {"title": "Industry"},
+                    "scale": {
+                      "domain": ["Advertising","Defense","Education","Entertainment","Finance","Healthcare","Hospitality","Legal Services","Manufacturing","Retail","Technology","Telecom","Transportation","Utilities"],
+                      "range": ["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf","#aec7e8","#ffbb78","#98df8a","#ff9896"]
+                    }
+                  },
+                  "opacity": {
+                    "condition": {"param": "industry_select", "value": 0.75},
+                    "value": 0.08
+                  },
+                  "size": {
+                    "field": "Training ROI Capped",
+                    "type": "quantitative",
+                    "title": "Training ROI",
+                    "legend": {"title": "Training ROI"}
+                  },
+                  "tooltip": [
+                    {"field": "Industry", "type": "nominal", "title": "Industry"},
+                    {"field": "Training Hours per Employee", "type": "quantitative", "format": ".2f", "title": "Training Hrs / Employee"},
+                    {"field": "Productivity Change (%)", "type": "quantitative", "format": ".2f", "title": "Productivity Change (%)"},
+                    {"field": "Training ROI", "type": "quantitative", "format": ".2f", "title": "Training ROI"}
+                  ]
+                }
+              },
+              {
+                "mark": {"type": "line", "color": "#999", "strokeDash": [5,3], "strokeWidth": 1.5},
+                "transform": [
+                  {"regression": "Productivity Change (%)", "on": "Training Hours per Employee"}
+                ],
+                "encoding": {
+                  "x": {"field": "Training Hours per Employee", "type": "quantitative"},
+                  "y": {"field": "Productivity Change (%)", "type": "quantitative"},
+                  "color": {"value": "#999999"},
+                  "opacity": {"value": 1}
+                }
+              }
+            ],
+            "height": 380,
+            "width": 620,
+            "title": {
+              "text": "Training Hours per Employee vs. Productivity Change",
+              "anchor": "start",
+              "fontSize": 16,
+              "subtitle": "Each point is a US enterprise. Click legend to highlight industry. Point size = Training ROI. Dashed = trend line.",
+              "subtitleFontSize": 12,
+              "subtitleColor": "#555"
+            }
+          };
+
+          const el = document.getElementById('vis');
+          vegaEmbed("#vis", finalSpec, {"mode": "vega-lite"})
+            .catch(err => {
+              el.innerHTML = '<div style="color:red"><p>Error: ' + err.message + '</p></div>';
+            });
+        })
+        .catch(err => {
+          // Fallback: show error if CSV not found
+          document.getElementById('vis').innerHTML =
+            '<div style="color:#c00; padding:1rem; font-family:sans-serif">' +
+            '<b>Could not load CSV.</b> Make sure <code>Enterprise_GenAI_Adoption_Impact.csv</code> ' +
+            'is in the same directory as this HTML file and you are serving it via a local server (e.g. <code>python -m http.server</code>).' +
+            '<br><br>Error: ' + err.message + '</div>';
+        });
+
+    })(vegaEmbed);
+  </script>
+</body>
+</html>

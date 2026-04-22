@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@6"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@6.1.0"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@7"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-8022adf71fb63fa356c4dcf8c0065383"}, "mark": {"type": "bar"}, "encoding": {"color": {"field": "Industry", "scale": {"scheme": "tableau20"}, "title": "Industry", "type": "nominal"}, "tooltip": [{"field": "Company Size", "type": "nominal"}, {"field": "Industry", "type": "nominal"}, {"field": "Training ROI", "format": ".2f", "type": "quantitative"}], "x": {"field": "Company Size", "title": "Company Size", "type": "nominal"}, "xOffset": {"field": "Industry", "type": "nominal"}, "y": {"field": "Training ROI", "title": "Average Training ROI", "type": "quantitative"}}, "height": 400, "title": "Training ROI by Company Size (Across Industries)", "width": 700, "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json", "datasets": {"data-8022adf71fb63fa356c4dcf8c0065383": [{"Company Size": "Small", "Industry": "Advertising", "Training ROI": 6.7920261127315245}, {"Company Size": "Small", "Industry": "Defense", "Training ROI": 4.7632884565701765}, {"Company Size": "Small", "Industry": "Education", "Training ROI": 7.773965632075135}, {"Company Size": "Small", "Industry": "Entertainment", "Training ROI": 6.061752603901498}, {"Company Size": "Small", "Industry": "Finance", "Training ROI": 7.090902644368326}, {"Company Size": "Small", "Industry": "Healthcare", "Training ROI": 4.999335017408151}, {"Company Size": "Small", "Industry": "Hospitality", "Training ROI": 7.436404533028456}, {"Company Size": "Small", "Industry": "Legal Services", "Training ROI": 9.7498497745759}, {"Company Size": "Small", "Industry": "Manufacturing", "Training ROI": 6.588546693250105}, {"Company Size": "Small", "Industry": "Retail", "Training ROI": 7.7441278962700455}, {"Company Size": "Small", "Industry": "Technology", "Training ROI": 7.172459366398423}, {"Company Size": "Small", "Industry": "Telecom", "Training ROI": 6.700558234459132}, {"Company Size": "Small", "Industry": "Transportation", "Training ROI": 8.285643866907202}, {"Company Size": "Small", "Industry": "Utilities", "Training ROI": 7.234861936010314}, {"Company Size": "Medium", "Industry": "Advertising", "Training ROI": 21.12824286072682}, {"Company Size": "Medium", "Industry": "Defense", "Training ROI": 18.85183915876997}, {"Company Size": "Medium", "Industry": "Education", "Training ROI": 22.631966853598307}, {"Company Size": "Medium", "Industry": "Entertainment", "Training ROI": 20.80741209133464}, {"Company Size": "Medium", "Industry": "Finance", "Training ROI": 18.757530893577965}, {"Company Size": "Medium", "Industry": "Healthcare", "Training ROI": 25.60474000290972}, {"Company Size": "Medium", "Industry": "Hospitality", "Training ROI": 23.267320425634107}, {"Company Size": "Medium", "Industry": "Legal Services", "Training ROI": 24.104932170604485}, {"Company Size": "Medium", "Industry": "Manufacturing", "Training ROI": 15.879371375558685}, {"Company Size": "Medium", "Industry": "Retail", "Training ROI": 23.204743649825367}, {"Company Size": "Medium", "Industry": "Technology", "Training ROI": 21.93469045105926}, {"Company Size": "Medium", "Industry": "Telecom", "Training ROI": 29.26921609533329}, {"Company Size": "Medium", "Industry": "Transportation", "Training ROI": 20.437386489986228}, {"Company Size": "Medium", "Industry": "Utilities", "Training ROI": 21.92942033984057}, {"Company Size": "Large", "Industry": "Advertising", "Training ROI": 35.12727499349976}, {"Company Size": "Large", "Industry": "Defense", "Training ROI": 34.20469327647589}, {"Company Size": "Large", "Industry": "Education", "Training ROI": 34.93123391531868}, {"Company Size": "Large", "Industry": "Entertainment", "Training ROI": 33.88303772262964}, {"Company Size": "Large", "Industry": "Finance", "Training ROI": 23.323791862451813}, {"Company Size": "Large", "Industry": "Healthcare", "Training ROI": 39.420293428380106}, {"Company Size": "Large", "Industry": "Hospitality", "Training ROI": 44.676023438274235}, {"Company Size": "Large", "Industry": "Legal Services", "Training ROI": 42.6103901014287}, {"Company Size": "Large", "Industry": "Manufacturing", "Training ROI": 38.05428184326044}, {"Company Size": "Large", "Industry": "Retail", "Training ROI": 44.20392302477291}, {"Company Size": "Large", "Industry": "Technology", "Training ROI": 35.30671039556701}, {"Company Size": "Large", "Industry": "Telecom", "Training ROI": 33.264771955078004}, {"Company Size": "Large", "Industry": "Transportation", "Training ROI": 24.453132568291224}, {"Company Size": "Large", "Industry": "Utilities", "Training ROI": 36.99291874225175}, {"Company Size": "Enterprise", "Industry": "Advertising", "Training ROI": 55.00278855447074}, {"Company Size": "Enterprise", "Industry": "Defense", "Training ROI": 43.70343090211383}, {"Company Size": "Enterprise", "Industry": "Education", "Training ROI": 50.63311008490534}, {"Company Size": "Enterprise", "Industry": "Entertainment", "Training ROI": 69.73234451546956}, {"Company Size": "Enterprise", "Industry": "Finance", "Training ROI": 49.57638287353027}, {"Company Size": "Enterprise", "Industry": "Healthcare", "Training ROI": 38.931663113831505}, {"Company Size": "Enterprise", "Industry": "Hospitality", "Training ROI": 41.4974613996589}, {"Company Size": "Enterprise", "Industry": "Legal Services", "Training ROI": 53.03879825736681}, {"Company Size": "Enterprise", "Industry": "Manufacturing", "Training ROI": 47.18971194730116}, {"Company Size": "Enterprise", "Industry": "Retail", "Training ROI": 52.44804757112149}, {"Company Size": "Enterprise", "Industry": "Technology", "Training ROI": 59.29050042989113}, {"Company Size": "Enterprise", "Industry": "Telecom", "Training ROI": 69.31142077497469}, {"Company Size": "Enterprise", "Industry": "Transportation", "Training ROI": 57.43457881110679}, {"Company Size": "Enterprise", "Industry": "Utilities", "Training ROI": 50.19759325656712}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
